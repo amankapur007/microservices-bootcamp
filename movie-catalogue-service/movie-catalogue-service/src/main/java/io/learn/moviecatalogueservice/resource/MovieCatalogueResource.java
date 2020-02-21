@@ -1,9 +1,13 @@
 package io.learn.moviecatalogueservice.resource;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.ribbon.proxy.annotation.Hystrix;
 import io.learn.moviecatalogueservice.model.Catalogue;
 import io.learn.moviecatalogueservice.model.Movie;
 import io.learn.moviecatalogueservice.model.Rating;
 import io.learn.moviecatalogueservice.model.UserRating;
+import io.learn.moviecatalogueservice.service.MovieInfo;
+import io.learn.moviecatalogueservice.service.UserRatingInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,20 +26,19 @@ import java.util.stream.Collectors;
 public class MovieCatalogueResource {
 
     @Autowired
-    private RestTemplate restTemplate;
+    MovieInfo movieInfo;
+
+    @Autowired
+    UserRatingInfo userRatingInfo;
 
     @Autowired
     private WebClient.Builder webClientBuilder;
     @RequestMapping("/{userId}")
     public List<Catalogue> getCatalogue(@PathVariable String userId){
 
-        UserRating userRating = restTemplate.getForObject("http://rating-data-service/ratingsdata/users/"+userId,
-                UserRating.class);
+        UserRating userRating = userRatingInfo.getUserRating(userId);
         return userRating.getUserRating().stream().map(rating -> {
-            Movie movie = restTemplate.getForObject("http://movie-info-service/movies/"+rating.getMovieId(),
-                    Movie.class);
-
-            return new Catalogue(movie.getName(), "Test", rating.getRating());
+            return movieInfo.getCatalogueItem(rating);
         }).collect(Collectors.toList());
     }
 

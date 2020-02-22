@@ -1,0 +1,10 @@
+my:
+  app:
+    name: properties from config sever
+    list: Hello,World
+    map: "{connection:'https://____',host:'123',port:'8080'}"
+
+db:
+  connection: connection-test-from-config-server
+  host: 123
+  port: 8080

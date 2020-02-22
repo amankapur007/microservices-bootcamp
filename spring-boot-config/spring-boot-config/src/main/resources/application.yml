@@ -1,0 +1,10 @@
+my:
+  app:
+    name: Spring boot config
+    list: Hello,World
+    map: "{connection:'https://____',host:'123',port:'8080'}"
+
+db:
+  connection: https://____
+  host: 123
+  port: 8080

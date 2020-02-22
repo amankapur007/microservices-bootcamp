@@ -1,0 +1,21 @@
+my:
+  app:
+    name: Spring boot config
+    list: Hello,World
+    map: "{connection:'https://____',host:'123',port:'8080'}"
+
+db:
+  connection: https://____
+  host: 123
+  port: 8080
+
+spring:
+  cloud:
+    config:
+      uri: http://localhost:8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
